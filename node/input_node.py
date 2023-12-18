@@ -10,15 +10,8 @@ class InputNode(NodeImpl):
         self.source = kwargs.get("source")
         self.source_type:str = kwargs.get("source_type")
         self.output = {
-            "data": None,
-            "label": {
-                "index": None,
-                "target": None
-            }
+            "data": None
         }
-        
-    def set_label(self, labels: dict):
-        self.output["label"] = labels
         
     def execute(self):
         match self.source_type.lower():
