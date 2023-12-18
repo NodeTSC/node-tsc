@@ -9,19 +9,20 @@ class InputNode(NodeImpl):
         
         self.source = kwargs.get("source")
         self.source_type:str = kwargs.get("source_type")
-        self.is_executed = False
-        self.output = None
+        self.output = {
+            "data": None,
+            "label": {
+                "index": None,
+                "target": None
+            }
+        }
+        
+    def set_label(self, labels: dict):
+        self.output["label"] = labels
         
     def execute(self):
-        if not self.is_executed:
-            match self.source_type.lower():
-                case 'arff':
-                    self.output = pd.DataFrame(arff.loadarff(self.source)[0])
-                case _:
-                    raise ValueError(f'"{self.source_type}" is not supported!')
-            self.is_executed = True
-        
-    def get_output(self):
-        self.execute()
-        return self.output
-
+        match self.source_type.lower():
+            case 'arff':
+                self.output["data"] = pd.DataFrame(arff.loadarff(self.source)[0])
+            case _:
+                raise ValueError(f'"{self.source_type}" is not supported!')
