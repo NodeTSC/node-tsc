@@ -11,13 +11,17 @@ class NodeImpl(ABC):
 
     def get_output(self, key):
         return self.output[key]
+    
+    @abstractmethod
+    def execute(self):
+        pass
 
 
 class ModelInput(ABC):
     def __init__(self) -> None:
         self.model = None
         
-    def add_input_node(self, model: NodeImpl):
+    def add_model_node(self, model: NodeImpl):
         self.model = model
 
 

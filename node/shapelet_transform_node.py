@@ -18,7 +18,7 @@ class ShapeletTransformNode(NodeImpl, DataInput):
             # dropping columns that is not time series data
             target_label = self.data.get_output("label")["target"]
             X_train = data.drop(columns=target_label)
-            y_train = data[target_label].astype(int)
+            y_train = data[target_label]
             # fitting model
             self.output["model"].fit(X_train, y_train)
             self.is_executed = True
