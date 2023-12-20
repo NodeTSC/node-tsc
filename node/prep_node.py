@@ -2,8 +2,10 @@ from node import NodeImpl, DataInput
 
 
 class PrepNode(NodeImpl, DataInput):
-    def __init__(self, project_path: str, **kwargs) -> None:
-        super().__init__(project_path, **kwargs)
+    def __init__(self, project_path: str, name: str = None, **kwargs) -> None:
+        super().__init__(project_path, name, **kwargs)
+        if name is None:
+            self.name = "Prep"
         self.instructions = []
         self.output = {
             "data": None,

@@ -4,11 +4,19 @@ import pandas as pd
 
 
 class ApplyModelNode(NodeImpl, DataInput, ModelInput):
-    def __init__(self, project_path: str, **kwargs) -> None:
-        super().__init__(project_path, **kwargs)
+    # def __init__(self, project_path: str, **kwargs) -> None:
+    #     super().__init__(project_path, **kwargs)
+    #     self.output = {
+    #         "data": None
+    #     }
+        
+    def __init__(self, project_path: str, name: str = None, **kwargs) -> None:
+        super().__init__(project_path, name, **kwargs)
+        if name is None:
+            self.name = "ApplyModel"
         self.output = {
             "data": None
-        }
+        }  
         
     def add_data_node(self, data: NodeImpl):
         try:

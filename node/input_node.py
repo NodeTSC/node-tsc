@@ -4,9 +4,10 @@ from scipy.io import arff
 
 
 class InputNode(NodeImpl):
-    def __init__(self, project_path: str, **kwargs) -> None:
-        super().__init__(project_path, **kwargs)
-        
+    def __init__(self, project_path: str, name: str = None, **kwargs) -> None:
+        super().__init__(project_path, name, **kwargs)
+        if name is None:
+            self.name = "Input"
         self.source = kwargs.get("source")
         self.source_type:str = kwargs.get("source_type")
         self.output = {

@@ -3,8 +3,9 @@ from uuid import uuid4
 
 
 class NodeImpl(ABC):
-    def __init__(self, project_path: str, **kwargs) -> None:
+    def __init__(self, project_path: str, name: str = None, **kwargs) -> None:
         self.id = uuid4()
+        self.name = name
         self.project_path = project_path
         self.parameters = kwargs
         self.output: str = None
