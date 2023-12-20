@@ -1,3 +1,4 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from uuid import uuid4
 
@@ -14,8 +15,15 @@ class NodeImpl(ABC):
         return self.output[key]
     
     @abstractmethod
-    def execute(self):
+    def execute(self) -> None:
         pass
+    
+    @abstractmethod
+    def priority(self) -> int:
+        pass
+    
+    def __lt__(self, other: NodeImpl):
+        return self.priority() < other.priority()
 
 
 class ModelInput(ABC):

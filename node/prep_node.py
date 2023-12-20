@@ -24,6 +24,9 @@ class PrepNode(NodeImpl, DataInput):
                     self.set_role(column, to)
                 case "change_type":
                     self.change_type(column, to)
+                    
+    def priority(self) -> int:
+        return self.data.priority() + 1
     
     def set_instructions(self, instruction: list):
         self.instructions = instruction

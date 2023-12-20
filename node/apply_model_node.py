@@ -4,12 +4,6 @@ import pandas as pd
 
 
 class ApplyModelNode(NodeImpl, DataInput, ModelInput):
-    # def __init__(self, project_path: str, **kwargs) -> None:
-    #     super().__init__(project_path, **kwargs)
-    #     self.output = {
-    #         "data": None
-    #     }
-        
     def __init__(self, project_path: str, name: str = None, **kwargs) -> None:
         super().__init__(project_path, name, **kwargs)
         if name is None:
@@ -40,3 +34,6 @@ class ApplyModelNode(NodeImpl, DataInput, ModelInput):
                 self.output["data"] = pd.concat([pd.DataFrame(transformed_X), data[target]], axis=1)
             else:
                 self.output["data"] = model.transform(data)
+                
+    def priority(self) -> int:
+        return self.data.priority() + self.model.priority() + 1

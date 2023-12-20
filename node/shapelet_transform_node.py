@@ -23,3 +23,6 @@ class ShapeletTransformNode(NodeImpl, DataInput):
             # fitting model
             self.output["model"].fit(X_train, y_train)
             self.is_executed = True
+            
+    def priority(self) -> int:
+        return self.data.priority() + 1

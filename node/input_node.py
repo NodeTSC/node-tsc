@@ -20,3 +20,6 @@ class InputNode(NodeImpl):
                 self.output["data"] = pd.DataFrame(arff.loadarff(self.source)[0])
             case _:
                 raise ValueError(f'"{self.source_type}" is not supported!')
+            
+    def priority(self) -> int:
+        return 0
