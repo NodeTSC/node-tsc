@@ -2,6 +2,7 @@
 temp_data/
 temp_proj/
 temp.ipynb
+temp*.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

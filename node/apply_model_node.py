@@ -10,8 +10,8 @@ class ApplyModelNode(NodeImpl, DataInput, ModelInput):
             self.name = "ApplyModel"
         self.output = {
             "data": None
-        }  
-        
+        }
+
     def add_data_node(self, data: NodeImpl):
         try:
             self.output["label"] = data.get_output("label")
