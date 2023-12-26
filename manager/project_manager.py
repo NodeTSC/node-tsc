@@ -68,8 +68,18 @@ class ProjectManager():
         # 2. reconnect all nodes using edges
         pass
     
+    def reset(self):
+        self.nodes = []
+        self.edges = []
+
     def execute(self):
-        for e in sorted(self.nodes):
+        executable_node = []
+        for node in self.nodes:
+            if node.priority() is None:
+                print(f"skip {node.name}...")
+            else:
+                executable_node.append(node)
+        for e in sorted(executable_node):
             print(f"priority {e.priority()} executing {e.name}... ({e.__class__})")
             e.execute() 
 
