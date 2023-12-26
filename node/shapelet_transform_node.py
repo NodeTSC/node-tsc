@@ -5,13 +5,15 @@ from pyts.transformation import ShapeletTransform
 
 class ShapeletTransformNode(NodeImpl, DataInput):
     def __init__(self, name: str = None, **kwargs) -> None:
-        super().__init__(name, **kwargs)
         if name is None:
             self.name = "ShapeletTransform"
+        self.st = ShapeletTransform(**kwargs)
+        super().__init__(name, **kwargs)
         self.output = {
-            "model": ShapeletTransform(**kwargs)
+            "model": self.st
         }
-        
+        self.parameters = self.st.get_params()
+
     def execute(self):
         if self.data is not None:
             # reading data
@@ -26,3 +28,11 @@ class ShapeletTransformNode(NodeImpl, DataInput):
             
     def priority(self) -> int:
         return self.data.priority() + 1
+    
+    def set_parameters(self, **kwargs):
+        super().set_parameters(**kwargs)
+        self.st.set_params(**kwargs)
+
+    def get_parameters(self) -> list[str]:
+        parameters = list(self.st.get_params().keys())
+        return parameters

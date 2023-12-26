@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Any
 from abc import ABC, abstractmethod
 from uuid import uuid4
 
@@ -7,8 +8,9 @@ class NodeImpl(ABC):
     def __init__(self, name: str = None, **kwargs) -> None:
         self.id = uuid4()
         self.name = name
-        self.parameters = kwargs
-        self.output: str = None
+        self.parameters: dict = {k: None for k in self.get_parameters()}
+        self.set_parameters(**kwargs)
+        self.output: Any = None
 
     def get_output(self, key):
         return self.output[key]
@@ -23,6 +25,16 @@ class NodeImpl(ABC):
     
     def __lt__(self, other: NodeImpl):
         return self.priority() < other.priority()
+    
+    def set_parameters(self, **kwargs):
+        for key, val in kwargs.items():
+            if key in self.get_parameters():
+                self.parameters[key] = val
+    
+    @abstractmethod
+    def get_parameters(self) -> list[str]:
+        """Returns list of available keyword attributes."""
+        return []
 
 
 class ModelInput(ABC):

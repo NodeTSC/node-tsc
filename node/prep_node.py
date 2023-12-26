@@ -6,10 +6,8 @@ class PrepNode(NodeImpl, DataInput):
         super().__init__(name, **kwargs)
         if name is None:
             self.name = "Prep"
-        try:
-            self.instructions = self.set_instructions(kwargs.get("instructions"))
-        except:
-            self.instructions = []
+        if self.parameters["instructions"] is None:
+            self.parameters["instructions"] = []
         self.output = {
             "data": None,
             "label": {
@@ -31,8 +29,8 @@ class PrepNode(NodeImpl, DataInput):
     def priority(self) -> int:
         return self.data.priority() + 1
     
-    def set_instructions(self, instruction: list):
-        self.instructions = instruction
+    def get_parameters(self) -> list[str]:
+        return ["instructions"]
     
     def set_role(self, column: str, role: str):
         self.output["label"][role] = column

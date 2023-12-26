@@ -37,3 +37,6 @@ class ApplyModelNode(NodeImpl, DataInput, ModelInput):
                 
     def priority(self) -> int:
         return self.data.priority() + self.model.priority() + 1
+
+    def get_parameters(self) -> list[str]:
+        return []

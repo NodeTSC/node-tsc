@@ -8,18 +8,19 @@ class InputNode(NodeImpl):
         super().__init__(name, **kwargs)
         if name is None:
             self.name = "Input"
-        self.source = kwargs.get("source")
-        self.source_type:str = kwargs.get("source_type")
         self.output = {
             "data": None
         }
         
     def execute(self):
-        match self.source_type.lower():
+        match self.parameters["source_type"].lower():
             case 'arff':
-                self.output["data"] = pd.DataFrame(arff.loadarff(self.source)[0])
+                self.output["data"] = pd.DataFrame(arff.loadarff(self.parameters["source"])[0])
             case _:
                 raise ValueError(f'"{self.source_type}" is not supported!')
             
     def priority(self) -> int:
         return 0
+    
+    def get_parameters(self) -> list[str]:
+        return ["source", "source_type"]
