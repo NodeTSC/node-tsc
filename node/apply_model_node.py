@@ -36,7 +36,10 @@ class ApplyModelNode(NodeImpl, DataInput, ModelInput):
                 self.output["data"] = model.transform(data)
                 
     def priority(self) -> int:
-        return self.data.priority() + self.model.priority() + 1
+        try:
+            return self.data.priority() + self.model.priority() + 1
+        except:
+            return None
 
     def get_parameters(self) -> list[str]:
         return []

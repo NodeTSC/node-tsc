@@ -27,7 +27,10 @@ class PrepNode(NodeImpl, DataInput):
                     self.change_type(column, to)
                     
     def priority(self) -> int:
-        return self.data.priority() + 1
+        try:
+            return self.data.priority() + 1
+        except:
+            return None
     
     def get_parameters(self) -> list[str]:
         return ["instructions"]

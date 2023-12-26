@@ -27,7 +27,10 @@ class ShapeletTransformNode(NodeImpl, DataInput):
             self.is_executed = True
             
     def priority(self) -> int:
-        return self.data.priority() + 1
+        try:
+            return self.data.priority() + 1
+        except:
+            return None
     
     def set_parameters(self, **kwargs):
         super().set_parameters(**kwargs)

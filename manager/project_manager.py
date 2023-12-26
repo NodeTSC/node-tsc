@@ -32,7 +32,7 @@ class ProjectManager():
             case EdgePortType.MODEL:
                 if isinstance(dest, ModelInput):
                     dest.add_model_node(source)
-        self.edges.append(EdgeInfo(source, dest, port))
+        self.edges.append(EdgeInfo(source.id, dest.id, port))
     
     def delete_edge(self, source: UUID, dest: UUID, port: EdgePortType):
         del_index = None
