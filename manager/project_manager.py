@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from node import NodeImpl
+from utils import NodeFactory, NodeType
 from uuid import UUID
 
 
@@ -9,13 +10,11 @@ class ProjectManager():
         self.nodes: list[NodeImpl] = []
         self.edges: list[EdgeInfo] = []
         
-    def add_node(self, node: NodeImpl):
-        # TODO: add node to list
-        pass
+    def add_node(self, node: NodeImpl) -> None:
+        self.nodes.append(node)
     
-    def delete_node(self, node: NodeImpl):
-        # TODO: delete a specific node from list
-        pass
+    def delete_node(self, node: NodeImpl) -> None:
+        self.nodes.remove(node)
     
     def update_node(self, node: NodeImpl, name: str, **kwargs):
         pass

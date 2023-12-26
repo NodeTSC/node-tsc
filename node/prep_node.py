@@ -6,7 +6,10 @@ class PrepNode(NodeImpl, DataInput):
         super().__init__(name, **kwargs)
         if name is None:
             self.name = "Prep"
-        self.instructions = []
+        try:
+            self.instructions = self.set_instructions(kwargs.get("instructions"))
+        except:
+            self.instructions = []
         self.output = {
             "data": None,
             "label": {
