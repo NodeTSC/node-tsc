@@ -18,7 +18,7 @@ class PrepNode(NodeImpl, DataInput):
         
     def execute(self):
         self.output["data"] = self.data.get_output("data")
-        for i in self.instructions:
+        for i in self.parameters["instructions"]:
             command, column, to = i
             match command:
                 case "set_role":
