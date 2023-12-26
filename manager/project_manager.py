@@ -22,7 +22,9 @@ class ProjectManager():
             node.name = name
         node.set_parameters(**kwargs)
     
-    def add_edge(self, source: NodeImpl, dest: NodeImpl, port: EdgePortType):
+    def add_edge(self, source: UUID, dest: UUID, port: EdgePortType):
+        source = self.get_node_by_id(source)
+        dest = self.get_node_by_id(dest)
         match port:
             case EdgePortType.DATA:
                 if isinstance(dest, DataInput):
@@ -32,7 +34,16 @@ class ProjectManager():
                     dest.add_model_node(source)
         self.edges.append(EdgeInfo(source, dest, port))
     
-    def delete_edge(self, source: NodeImpl, dest: NodeImpl, port: EdgePortType):
+    def delete_edge(self, source: UUID, dest: UUID, port: EdgePortType):
+        del_index = None
+        for index, edge in enumerate(self.edges):
+            if edge == EdgeInfo(source, dest, port):
+                del_index = index
+        if del_index is None:
+            raise ValueError("Edge not found...")
+        self.edges.pop(del_index)
+        source = self.get_node_by_id(source)
+        dest = self.get_node_by_id(dest)
         match port:
             case EdgePortType.DATA:
                 if isinstance(dest, DataInput) and dest.data == source:
@@ -40,6 +51,12 @@ class ProjectManager():
             case EdgePortType.MODEL:
                 if isinstance(dest, ModelInput) and dest.model == source:
                     dest.model = None
+                    
+    def get_node_by_id(self, uuid: UUID) -> NodeImpl:
+        for node in self.nodes:
+            if node.id == uuid:
+                return node
+        return None
 
     def save(self):
         # TODO: save neccessary things into json/ymal or else
@@ -58,10 +75,13 @@ class ProjectManager():
 
 
 class EdgeInfo():
-    def __init__(self, source: NodeImpl, dest: NodeImpl, port: EdgePortType) -> None:
+    def __init__(self, source: UUID, dest: UUID, port: EdgePortType) -> None:
         self.source = source
         self.dest = dest
         self.port = port
+        
+    def __eq__(self, other: EdgeInfo) -> bool:
+        return self.source == other.source and self.dest == other.dest and self.port == other.port
         
 
 class EdgePortType(Enum):

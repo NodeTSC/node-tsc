@@ -5,10 +5,10 @@ from pyts.transformation import ShapeletTransform
 
 class ShapeletTransformNode(NodeImpl, DataInput):
     def __init__(self, name: str = None, **kwargs) -> None:
-        if name is None:
-            self.name = "ShapeletTransform"
         self.st = ShapeletTransform(**kwargs)
         super().__init__(name, **kwargs)
+        if name is None:
+            self.name = "ShapeletTransform"
         self.output = {
             "model": self.st
         }
