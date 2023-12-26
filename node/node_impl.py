@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any
 from abc import ABC, abstractmethod
-from uuid import uuid4
+from uuid import uuid4, UUID
 
 
 class NodeImpl(ABC):
@@ -35,6 +35,9 @@ class NodeImpl(ABC):
     def get_parameters(self) -> list[str]:
         """Returns list of available keyword attributes."""
         return []
+    
+    def set_id(self, uuid: UUID):
+        self.id = uuid
 
 
 class ModelInput(ABC):
