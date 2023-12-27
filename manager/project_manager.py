@@ -4,6 +4,7 @@ from enum import Enum
 from node import NodeImpl, ModelInput, DataInput
 from utils import NodeFactory, NodeType
 from uuid import UUID
+import pickle
 
 
 class ProjectManager():
@@ -58,15 +59,19 @@ class ProjectManager():
                 return node
         return None
 
-    def save(self):
-        # TODO: save neccessary things into json/ymal or else
-        pass
+    def save(self, fname: str):
+        with open(fname, "wb") as f:
+            pickle.dump(
+                {"nodes": self.nodes, "edges": self.edges},
+                file=f
+            )
     
-    def load(self):
-        # TODO: must satisfy the following steps
-        # 1. recreate all nodes with their attributes
-        # 2. reconnect all nodes using edges
-        pass
+    def load(self, fname: str):
+        with open(fname, "rb") as f:
+            obj = pickle.load(f)
+            self.reset()
+            self.nodes = obj["nodes"]
+            self.edges = obj["edges"]
     
     def reset(self):
         self.nodes = []
