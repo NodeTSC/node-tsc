@@ -90,7 +90,10 @@ class ProjectManager():
             e.execute()
             
     def json(self):
-        return json.dumps({"nodes": self.nodes, "edges": self.edges}, indent=4)
+        return json.dumps({
+            "nodes": [node.info() for node in self.nodes],
+            "edges": self.edges
+        })
 
 
 class EdgeInfo():

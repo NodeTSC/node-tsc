@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Any
 from abc import ABC, abstractmethod
 from uuid import uuid4, UUID
+import json
 
 
 class NodeImpl(ABC):
@@ -38,6 +39,9 @@ class NodeImpl(ABC):
     
     def set_id(self, uuid: UUID):
         self.id = uuid
+        
+    def info(self):
+        return {"name": self.name, "id": str(self.id), "kwargs": self.parameters}
 
 
 class ModelInput(ABC):
