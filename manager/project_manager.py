@@ -92,7 +92,7 @@ class ProjectManager():
     def json(self):
         return json.dumps({
             "nodes": [node.info() for node in self.nodes],
-            "edges": self.edges
+            "edges": [edge.info() for edge in self.edges]
         })
 
 
@@ -104,6 +104,13 @@ class EdgeInfo():
         
     def __eq__(self, other: EdgeInfo) -> bool:
         return self.source == other.source and self.dest == other.dest and self.port == other.port
+    
+    def info(self):
+        return {
+            "source": str(self.source),
+            "dest": str(self.dest),
+            "port": self.port.name
+        }
         
 
 class EdgePortType(Enum):
