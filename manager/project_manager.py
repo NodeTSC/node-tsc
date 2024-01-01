@@ -4,6 +4,7 @@ from enum import Enum
 from node import NodeImpl, ModelInput, DataInput
 from utils import NodeFactory, NodeType
 from uuid import UUID
+import json
 import pickle
 
 
@@ -86,7 +87,10 @@ class ProjectManager():
                 executable_node.append(node)
         for e in sorted(executable_node):
             print(f"priority {e.priority()} executing {e.name}... ({e.__class__})")
-            e.execute() 
+            e.execute()
+            
+    def json(self):
+        return json.dumps({"nodes": self.nodes, "edges": self.edges}, indent=4)
 
 
 class EdgeInfo():
