@@ -1,11 +1,10 @@
+from uuid import UUID
 from node import NodeImpl, DataInput
 
 
 class PrepNode(NodeImpl, DataInput):
-    def __init__(self, name: str = None, **kwargs) -> None:
-        super().__init__(name, **kwargs)
-        if name is None:
-            self.name = "Prep"
+    def __init__(self, name: str = "Prep", id_: UUID = None, **kwargs) -> None:
+        super().__init__(name, id_, **kwargs)
         if self.parameters["instructions"] is None:
             self.parameters["instructions"] = []
         self.output = {

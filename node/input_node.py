@@ -1,13 +1,12 @@
+from uuid import UUID
 from node import NodeImpl
 import pandas as pd
 from scipy.io import arff
 
 
 class InputNode(NodeImpl):
-    def __init__(self, name: str = None, **kwargs) -> None:
-        super().__init__(name, **kwargs)
-        if name is None:
-            self.name = "Input"
+    def __init__(self, name: str = "Input", id_: UUID = None, **kwargs) -> None:
+        super().__init__(name, id_, **kwargs)
         self.output = {
             "data": None
         }

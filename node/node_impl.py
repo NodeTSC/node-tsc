@@ -6,8 +6,8 @@ import json
 
 
 class NodeImpl(ABC):
-    def __init__(self, name: str = None, **kwargs) -> None:
-        self.id = uuid4()
+    def __init__(self, name: str = None, id_: UUID = None, **kwargs) -> None:
+        self.id = uuid4() if id_ is None else id_
         self.name = name
         self.parameters: dict = {k: None for k in self.get_parameters()}
         self.set_parameters(**kwargs)

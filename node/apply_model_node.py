@@ -1,13 +1,12 @@
 from node import NodeImpl, DataInput, ModelInput
 from node.node_impl import NodeImpl
 import pandas as pd
+from uuid import UUID
 
 
 class ApplyModelNode(NodeImpl, DataInput, ModelInput):
-    def __init__(self, name: str = None, **kwargs) -> None:
-        super().__init__(name, **kwargs)
-        if name is None:
-            self.name = "ApplyModel"
+    def __init__(self, name: str = "ApplyModel", id_: UUID = None, **kwargs) -> None:
+        super().__init__(name, id_, **kwargs)
         self.output = {
             "data": None
         }

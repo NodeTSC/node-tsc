@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from enum import Enum
 from node import InputNode, PrepNode, ShapeletTransformNode, ApplyModelNode, NodeImpl
+from uuid import UUID
 
 
 class NodeType(Enum):
@@ -13,7 +14,7 @@ class NodeType(Enum):
 
 class NodeFactory(Enum):
     @staticmethod
-    def create_node(node_type: NodeType, name: str = None, **kwargs):
+    def create_node(node_type: NodeType, name: str = None, id_: UUID = None, **kwargs):
         node: NodeImpl = None
         match node_type:
             case NodeType.INPUT:
@@ -24,5 +25,5 @@ class NodeFactory(Enum):
                 node = ShapeletTransformNode
             case NodeType.APPLY:
                 node = ApplyModelNode
-        node = node(name=name, **kwargs)
+        node = node(name, id_, **kwargs)
         return node

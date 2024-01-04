@@ -1,14 +1,13 @@
 from typing import Any
+from uuid import UUID
 from node import NodeImpl, DataInput
 from pyts.transformation import ShapeletTransform
 
 
 class ShapeletTransformNode(NodeImpl, DataInput):
-    def __init__(self, name: str = None, **kwargs) -> None:
+    def __init__(self, name: str = "ShapeletTransform", id_: UUID = None, **kwargs) -> None:
         self.st = ShapeletTransform(**kwargs)
-        super().__init__(name, **kwargs)
-        if name is None:
-            self.name = "ShapeletTransform"
+        super().__init__(name, id_, **kwargs)
         self.output = {
             "model": self.st
         }

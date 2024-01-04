@@ -20,8 +20,14 @@ def project_info():
 def project_node():
     if request.method == 'POST':
         data = json.loads(request.data)
+        id_ = None
+        try:
+            id_ = UUID(data["id"])
+        except:
+            pass
         node = NodeFactory.create_node(
             node_type=NodeType[data["node-type"]],
+            id_=id_,
             name=data["name"],
             **data["kwargs"]
         )
@@ -42,6 +48,6 @@ def project_edge():
     return "Hi I'm not implemented yet... Sorry..."
 
 @app.route("/project/execute")
-async def project_execute():
-    data = await project.execute()
+def project_execute():
+    data = project.execute()
     return "Executed..."
