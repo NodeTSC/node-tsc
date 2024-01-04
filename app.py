@@ -18,34 +18,46 @@ def project_info():
 
 @app.route("/project/node", methods=['POST', 'PUT', 'DELETE'])
 def project_node():
-    if request.method == 'POST':
-        data = json.loads(request.data)
-        id_ = None
-        try:
-            id_ = UUID(data["id"])
-        except:
+    data = json.loads(request.data)
+    id_ = None
+    try:
+        id_ = UUID(data["id"])
+    except:
+        pass
+    match request.method:
+        case 'POST':
+            node = NodeFactory.create_node(
+                node_type=NodeType[data["node-type"]],
+                id_=id_,
+                name=data["name"],
+                **data["kwargs"]
+            )
+            project.add_node(node)
+        case 'PUT':
+            # TODO: add node update method
             pass
-        node = NodeFactory.create_node(
-            node_type=NodeType[data["node-type"]],
-            id_=id_,
-            name=data["name"],
-            **data["kwargs"]
-        )
-        project.add_node(node)
-        return project.json()
-    return "Hi I'm not implemented yet... Sorry..."
+        case 'DELETE':
+            node = project.get_node_by_id(id_)
+            if node is None:
+                return "Node Not Found", 404
+            project.delete_node(node)
+    return project.json()
 
 @app.route("/project/edge", methods=['POST', 'DELETE'])
 def project_edge():
-    if request.method == 'POST':
-        data = json.loads(request.data)
-        project.add_edge(
-            source=UUID(data["source"]),
-            dest=UUID(data["dest"]),
-            port=EdgePortType[data["port-type"]]
-        )
-        return project.json()
-    return "Hi I'm not implemented yet... Sorry..."
+    data = json.loads(request.data)
+    action = None
+    match request.method:
+        case 'POST':
+            action = project.add_edge
+        case 'DELETE':
+            action = project.delete_edge
+    action(
+        source=UUID(data["source"]),
+        dest=UUID(data["dest"]),
+        port=EdgePortType[data["port-type"]]
+    )
+    return project.json()
 
 @app.route("/project/execute")
 def project_execute():

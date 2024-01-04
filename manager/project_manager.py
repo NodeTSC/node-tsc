@@ -17,6 +17,13 @@ class ProjectManager():
         self.nodes.append(node)
     
     def delete_node(self, node: NodeImpl) -> None:
+        for other_node in self.nodes:
+            if isinstance(other_node, DataInput):
+                if other_node.data.id == node.id:
+                    self.delete_edge(node.id, other_node.id, EdgePortType.DATA)
+            if isinstance(other_node, ModelInput):
+                if other_node.model.id == node.id:
+                    self.delete_edge(node.id, other_node.id, EdgePortType.MODEL)
         self.nodes.remove(node)
     
     def update_node(self, node: NodeImpl, name: str = None, **kwargs):
