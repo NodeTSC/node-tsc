@@ -34,8 +34,10 @@ def project_node():
             )
             project.add_node(node)
         case 'PUT':
-            # TODO: add node update method
-            pass
+            node = project.get_node_by_id(id_)
+            if node is None:
+                return "Node Not Found", 404
+            node.set_parameters(**data["kwargs"])
         case 'DELETE':
             node = project.get_node_by_id(id_)
             if node is None:
