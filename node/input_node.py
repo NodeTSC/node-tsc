@@ -7,9 +7,7 @@ from scipy.io import arff
 class InputNode(NodeImpl):
     def __init__(self, name: str = "Input", id_: UUID = None, **kwargs) -> None:
         super().__init__(name, id_, **kwargs)
-        self.output = {
-            "data": None
-        }
+        self.output["data"] = None
         
     def execute(self):
         match self.parameters["source_type"].lower():

@@ -47,6 +47,9 @@ class NodeImpl(ABC):
     def info(self):
         return {"name": self.name, "id": str(self.id), "kwargs": self.parameters}
 
+    def set_label(self, label_dict: dict[str, Any]):
+        self.output["label"] = label_dict
+
 
 class ModelInput(ABC):
     def __init__(self) -> None:

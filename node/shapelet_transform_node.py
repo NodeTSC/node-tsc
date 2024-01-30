@@ -28,7 +28,6 @@ class ShapeletTransformNode(NodeImpl, DataInput):
                 columns=[f"shapelet_{i}" for i in range(len(self.st.shapelets_))]
             )
             self.output["data"][target_label] = y_train
-            self.is_executed = True
             
     def priority(self) -> int:
         try:

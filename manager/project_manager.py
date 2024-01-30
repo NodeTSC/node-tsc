@@ -32,8 +32,8 @@ class ProjectManager():
         node.set_parameters(**kwargs)
     
     def add_edge(self, source: UUID, dest: UUID, port: EdgePortType):
-        source = self.get_node_by_id(source)
-        dest = self.get_node_by_id(dest)
+        source: NodeImpl = self.get_node_by_id(source)
+        dest: NodeImpl = self.get_node_by_id(dest)
         match port:
             case EdgePortType.DATA:
                 if isinstance(dest, DataInput):
@@ -42,6 +42,8 @@ class ProjectManager():
                 if isinstance(dest, ModelInput):
                     dest.add_model_node(source)
         self.edges.append(EdgeInfo(source.id, dest.id, port))
+        # TODO: change this temporary label transfering
+        dest.set_label(source.get_output("label"))
     
     def delete_edge(self, source: UUID, dest: UUID, port: EdgePortType):
         del_index = None
