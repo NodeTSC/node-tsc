@@ -2,6 +2,7 @@ from typing import Any
 from uuid import UUID
 from node import NodeImpl, DataInput
 from pyts.transformation import ShapeletTransform
+import pandas as pd
 
 
 class ShapeletTransformNode(NodeImpl, DataInput):
@@ -22,7 +23,13 @@ class ShapeletTransformNode(NodeImpl, DataInput):
             X_train = data.drop(columns=target_label)
             y_train = data[target_label]
             # fitting model
-            self.output["model"].fit(X_train, y_train)
+            self.st.fit(X_train, y_train)
+            # transforming training data
+            self.output["data"] = pd.DataFrame(
+                self.st.transform(X_train),
+                columns=[f"shapelet_{i}" for i in range(len(self.st.shapelets_))]
+            )
+            self.output["data"][target_label] = y_train
             self.is_executed = True
             
     def priority(self) -> int:
