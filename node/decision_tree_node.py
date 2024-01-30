@@ -23,7 +23,7 @@ class DecisionTreeNode(NodeImpl, DataInput):
             # fitting model
             self.classifier.fit(X_train, y_train)
             # transforming training data
-            self.output["predict"] = self.classifier.predict(X_train)
+            self.output["data"] = self.classifier.predict(X_train)
             # debugging score
             print(f"{self.name} train score: {self.classifier.score(X_train, y_train)}")
     

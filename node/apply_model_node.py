@@ -22,15 +22,24 @@ class ApplyModelNode(NodeImpl, DataInput, ModelInput):
             data = self.data.get_output("data")
             
             # data has target label
-            if "target" in self.output["label"]:
+            if self.output["label"]["target"] is not None:
                 target = self.output["label"]["target"]
                 
                 X = data.drop(columns=target)
-                transformed_X = model.transform(X)
+                transformed_X = None
                 
+                execution_functions = ["transform", "predict"]
+                for func in execution_functions:
+                    try:
+                        transformed_X = getattr(model, func)(X)
+                        break
+                    except AttributeError:
+                        pass
+                # TODO: return original data columns name when transform to prevent warning
                 self.output["data"] = pd.concat([pd.DataFrame(transformed_X), data[target]], axis=1)
             else:
-                self.output["data"] = model.transform(data)
+                # TODO: handle when there is no target label for apply model
+                pass
                 
     def priority(self) -> int:
         try:
