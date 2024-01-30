@@ -11,7 +11,11 @@ class NodeImpl(ABC):
         self.name = name
         self.parameters: dict = {k: None for k in self.get_parameters()}
         self.set_parameters(**kwargs)
-        self.output: Any = None
+        self.output: dict[str, Any] = {
+            "label": {
+                "target": None,
+            }
+        }
 
     def get_output(self, key):
         return self.output[key]

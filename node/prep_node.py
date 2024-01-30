@@ -7,13 +7,7 @@ class PrepNode(NodeImpl, DataInput):
         super().__init__(name, id_, **kwargs)
         if self.parameters["instructions"] is None:
             self.parameters["instructions"] = []
-        self.output = {
-            "data": None,
-            "label": {
-                "index": None,
-                "target": None
-            }
-        }
+        self.output["data"] = None
         
     def execute(self):
         self.output["data"] = self.data.get_output("data")

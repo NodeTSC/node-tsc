@@ -9,9 +9,7 @@ class ShapeletTransformNode(NodeImpl, DataInput):
     def __init__(self, name: str = "ShapeletTransform", id_: UUID = None, **kwargs) -> None:
         self.st = ShapeletTransform(**kwargs)
         super().__init__(name, id_, **kwargs)
-        self.output = {
-            "model": self.st
-        }
+        self.output["model"] = self.st
         self.parameters = self.st.get_params()
 
     def execute(self):

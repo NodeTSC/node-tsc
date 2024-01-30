@@ -7,9 +7,7 @@ from uuid import UUID
 class ApplyModelNode(NodeImpl, DataInput, ModelInput):
     def __init__(self, name: str = "ApplyModel", id_: UUID = None, **kwargs) -> None:
         super().__init__(name, id_, **kwargs)
-        self.output = {
-            "data": None
-        }
+        self.output["data"] = None
 
     def add_data_node(self, data: NodeImpl):
         try:
