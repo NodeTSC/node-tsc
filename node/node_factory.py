@@ -8,7 +8,7 @@ from uuid import UUID
 class NodeType(Enum):
     INPUT = "input"
     PREP = "prep"
-    SHAPELET_TRAINSFORM = "shapelet_transform"
+    SHAPELET_TRANSFORM = "shapelet_transform"
     APPLY = "apply"
     DECISION_TREE = "decision_tree"
 
@@ -22,7 +22,7 @@ class NodeFactory(Enum):
                 node = InputNode
             case NodeType.PREP:
                 node = PrepNode
-            case NodeType.SHAPELET_TRAINSFORM:
+            case NodeType.SHAPELET_TRANSFORM:
                 node = ShapeletTransformNode
             case NodeType.APPLY:
                 node = ApplyModelNode
