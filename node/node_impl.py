@@ -2,7 +2,6 @@ from __future__ import annotations
 from typing import Any
 from abc import ABC, abstractmethod
 from uuid import uuid4, UUID
-import json
 
 
 class NodeImpl(ABC):
@@ -30,6 +29,9 @@ class NodeImpl(ABC):
     
     def __lt__(self, other: NodeImpl):
         return self.priority() < other.priority()
+    
+    def __str__(self) -> str:
+        return f'<<{self.__class__.__name__}, name: {self.name}>>'
     
     def set_parameters(self, **kwargs):
         for key, val in kwargs.items():

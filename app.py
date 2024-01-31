@@ -3,7 +3,11 @@ from manager.project_manager import ProjectManager, EdgePortType
 from node import NodeFactory, NodeType
 import json
 from uuid import UUID
+import logging
 
+
+# logging setting
+logging.basicConfig(level = logging.INFO)  # showing logging msg
 
 app = Flask(__name__)
 project = ProjectManager()
@@ -33,16 +37,19 @@ def project_node():
                 **data["kwargs"]
             )
             project.add_node(node)
+            app.logger.info(f'Create node => {node} with {data["kwargs"]}')
         case 'PUT':
             node = project.get_node_by_id(id_)
             if node is None:
                 return "Node Not Found", 404
             node.set_parameters(**data["kwargs"])
+            app.logger.info(f'Update node => {node} with {data["kwargs"]}')
         case 'DELETE':
             node = project.get_node_by_id(id_)
             if node is None:
                 return "Node Not Found", 404
             project.delete_node(node)
+            app.logger.info(f'Delete node => {node}')
     return project.json()
 
 @app.route("/project/edge", methods=['POST', 'DELETE'])

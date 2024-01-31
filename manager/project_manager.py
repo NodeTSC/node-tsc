@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from enum import Enum
 from node import NodeImpl, ModelInput, DataInput
-from utils import NodeFactory, NodeType
 from uuid import UUID
 import json
 import pickle
+import logging
 
 
 class ProjectManager():
@@ -44,6 +44,7 @@ class ProjectManager():
         self.edges.append(EdgeInfo(source.id, dest.id, port))
         # TODO: change this temporary label transfering
         dest.set_label(source.get_output("label"))
+        logging.info(f'Add edge => {source}-{dest} type: {port.name}')
     
     def delete_edge(self, source: UUID, dest: UUID, port: EdgePortType):
         del_index = None
@@ -62,7 +63,8 @@ class ProjectManager():
             case EdgePortType.MODEL:
                 if isinstance(dest, ModelInput) and dest.model == source:
                     dest.model = None
-                    
+        logging.info(f'Delete edge => {source}-{dest} type: {port.name}')
+                                        
     def get_node_by_id(self, uuid: UUID) -> NodeImpl:
         for node in self.nodes:
             if node.id == uuid:
