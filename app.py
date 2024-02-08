@@ -42,6 +42,7 @@ def project_node():
             node = project.get_node_by_id(id_)
             if node is None:
                 return "Node Not Found", 404
+            node.name = data["name"]
             node.set_parameters(**data["kwargs"])
             app.logger.info(f'Update node => {node} with {data["kwargs"]}')
         case 'DELETE':
@@ -50,7 +51,8 @@ def project_node():
                 return "Node Not Found", 404
             project.delete_node(node)
             app.logger.info(f'Delete node => {node}')
-    return project.json()
+            return f"Node <id: {id_}> is deleted"
+    return node.info()
 
 @app.route("/project/edge", methods=['POST', 'DELETE'])
 def project_edge():
