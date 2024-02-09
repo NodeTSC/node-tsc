@@ -3,6 +3,7 @@ from uuid import UUID
 from node import NodeImpl, DataInput
 from pyts.transformation import ShapeletTransform
 import pandas as pd
+import numpy as np
 
 
 class ShapeletTransformNode(NodeImpl, DataInput):
@@ -42,3 +43,10 @@ class ShapeletTransformNode(NodeImpl, DataInput):
     def get_parameters(self) -> list[str]:
         parameters = list(self.st.get_params().keys())
         return parameters
+    
+    def get_visualize_data(self):
+        return {
+            "shapelets": self.st.shapelets_.tolist(),
+            "labels": list(self.data.get_output("data").loc[self.st.indices_[:, 0], self.data.get_output("label")["target"]]),
+            "scores": self.st.scores_.tolist(),
+        }

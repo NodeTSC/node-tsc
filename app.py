@@ -79,3 +79,10 @@ def project_edge():
 def project_execute():
     data = project.execute()
     return "Executed..."
+
+@app.route("/visualize/data", methods=["GET"])
+def visualize_data():
+    nodeId = UUID(request.args.get("nodeId"))
+    return json.dumps(
+        project.get_node_by_id(nodeId).get_visualize_data()
+    )

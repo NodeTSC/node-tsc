@@ -51,6 +51,9 @@ class NodeImpl(ABC):
 
     def set_label(self, label_dict: dict[str, Any]):
         self.output["label"] = label_dict
+        
+    def get_visualize_data(self) -> dict[str, Any]:
+        return {}
 
 
 class ModelInput(ABC):

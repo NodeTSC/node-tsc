@@ -6,6 +6,7 @@ from uuid import UUID
 import json
 import pickle
 import logging
+from tqdm import tqdm
 
 
 class ProjectManager():
@@ -96,7 +97,8 @@ class ProjectManager():
                 print(f"skip {node.name}...")
             else:
                 executable_node.append(node)
-        for e in sorted(executable_node):
+        executable_node.sort()
+        for e in tqdm(executable_node, desc="execute nodes"):
             print(f"priority {e.priority()} executing {e.name}... ({e.__class__})")
             e.execute()
             
