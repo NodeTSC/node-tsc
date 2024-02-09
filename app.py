@@ -16,6 +16,11 @@ project = ProjectManager()
 def index():
     return "Welcome to NodeTSC API!"
 
+@app.route("/project/reset")
+def reset():
+    project.reset()
+    return project.json()
+
 @app.route("/project/info", methods=['GET'])
 def project_info():
     return project.json()
