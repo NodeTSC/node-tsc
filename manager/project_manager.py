@@ -19,6 +19,10 @@ class ProjectManager():
     
     def delete_node(self, node: NodeImpl) -> None:
         for other_node in self.nodes:
+            # skip self
+            if other_node.id == node.id:
+                continue
+            # cascade remove
             if isinstance(other_node, DataInput):
                 if other_node.data.id == node.id:
                     self.delete_edge(node.id, other_node.id, EdgePortType.DATA)
