@@ -47,7 +47,7 @@ class NodeImpl(ABC):
         self.id = uuid
         
     def info(self):
-        return {"name": self.name, "id": str(self.id), "kwargs": self.parameters}
+        return {"name": self.name, "id": str(self.id), "kwargs": self.parameters, "type": self.__class__.__name__}
 
     def set_label(self, label_dict: dict[str, Any]):
         self.output["label"] = label_dict

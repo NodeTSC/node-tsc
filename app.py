@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_cors import CORS
 from manager.project_manager import ProjectManager, EdgePortType
 from node import NodeFactory, NodeType
 import json
@@ -10,6 +11,7 @@ import logging
 logging.basicConfig(level = logging.INFO)  # showing logging msg
 
 app = Flask(__name__)
+CORS(app)  # bypass CORS for all domain
 project = ProjectManager()
 
 @app.route("/")
@@ -25,8 +27,14 @@ def reset():
 def project_info():
     return project.json()
 
-@app.route("/project/node", methods=['POST', 'PUT', 'DELETE'])
+@app.route("/project/node", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def project_node():
+    # get node info exception case
+    if request.method == 'GET':
+        nodeId = UUID(request.args.get("nodeId"))
+        node = project.get_node_by_id(nodeId)
+        return json.dumps(node.info())
+    # other request methods
     data = json.loads(request.data)
     id_ = None
     try:
