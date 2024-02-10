@@ -85,6 +85,16 @@ class ProjectManager():
             self.reset()
             self.nodes = obj["nodes"]
             self.edges = obj["edges"]
+            for node in self.nodes:
+                try:
+                    node_info = json.dumps(node.info())
+                except:
+                    print(node.info())
+            for edge in self.edges:
+                try:
+                    edge_info = json.dumps(edge.info())
+                except:
+                    print(edge.info())
     
     def reset(self):
         self.nodes = []

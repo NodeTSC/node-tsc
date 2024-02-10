@@ -45,8 +45,13 @@ class ShapeletTransformNode(NodeImpl, DataInput):
         return parameters
     
     def get_visualize_data(self):
+        shapelets = self.st.shapelets_.tolist()
+        # solve unequal length conversion to list
+        for idx, s in enumerate(shapelets):
+            if isinstance(s, np.ndarray):
+                shapelets[idx] = s.tolist()
         return {
-            "shapelets": self.st.shapelets_.tolist(),
+            "shapelets": shapelets,
             "labels": list(self.data.get_output("data").loc[self.st.indices_[:, 0], self.data.get_output("label")["target"]]),
             "scores": self.st.scores_.tolist(),
         }

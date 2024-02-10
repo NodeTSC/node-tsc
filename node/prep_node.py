@@ -17,7 +17,11 @@ class PrepNode(NodeImpl, DataInput):
                 case "set_role":
                     self.set_role(column, to)
                 case "change_type":
-                    self.change_type(column, to)
+                    match to:
+                        case "int":
+                            self.change_type(column, int)
+                        case "float":
+                            self.change_type(column, float)
                     
     def priority(self) -> int:
         try:

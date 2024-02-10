@@ -80,6 +80,21 @@ def project_execute():
     data = project.execute()
     return "Executed..."
 
+@app.route("/project/save")
+def project_save():
+    data = json.loads(request.data)
+    project.save(data["path"])
+    return "saved"
+
+@app.route("/project/load")
+def project_load():
+    app.logger.info(request.data)
+    data = json.loads(request.data)
+    app.logger.info(data["path"])
+    project.load(data["path"])
+    # return project.json()
+    return "loaded"
+
 @app.route("/visualize/data", methods=["GET"])
 def visualize_data():
     nodeId = UUID(request.args.get("nodeId"))
