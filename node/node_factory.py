@@ -13,7 +13,7 @@ class NodeType(Enum):
     DECISION_TREE = "decision_tree"
 
 
-class NodeFactory(Enum):
+class NodeFactory():
     @staticmethod
     def create_node(node_type: NodeType, name: str = None, id_: UUID = None, **kwargs):
         node: NodeImpl = None

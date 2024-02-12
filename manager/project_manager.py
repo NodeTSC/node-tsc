@@ -12,7 +12,7 @@ from tqdm import tqdm
 class ProjectManager():
     def __init__(self) -> None:
         self.nodes: list[NodeImpl] = []
-        self.edges: list[EdgeInfo] = []
+        self.edges: list[Edge] = []
         
     def add_node(self, node: NodeImpl) -> None:
         self.nodes.append(node)
@@ -46,7 +46,7 @@ class ProjectManager():
             case EdgePortType.MODEL:
                 if isinstance(dest, ModelInput):
                     dest.add_model_node(source)
-        self.edges.append(EdgeInfo(source.id, dest.id, port))
+        self.edges.append(Edge(source.id, dest.id, port))
         # TODO: change this temporary label transfering
         dest.set_label(source.get_output("label"))
         logging.info(f'Add edge => {source}-{dest} type: {port.name}')
@@ -54,7 +54,7 @@ class ProjectManager():
     def delete_edge(self, source: UUID, dest: UUID, port: EdgePortType):
         del_index = None
         for index, edge in enumerate(self.edges):
-            if edge == EdgeInfo(source, dest, port):
+            if edge == Edge(source, dest, port):
                 del_index = index
         if del_index is None:
             raise ValueError("Edge not found...")
@@ -123,13 +123,13 @@ class ProjectManager():
         })
 
 
-class EdgeInfo():
+class Edge():
     def __init__(self, source: UUID, dest: UUID, port: EdgePortType) -> None:
         self.source = source
         self.dest = dest
         self.port = port
         
-    def __eq__(self, other: EdgeInfo) -> bool:
+    def __eq__(self, other: Edge) -> bool:
         return self.source == other.source and self.dest == other.dest and self.port == other.port
     
     def info(self):

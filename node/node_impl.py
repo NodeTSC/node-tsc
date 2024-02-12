@@ -45,12 +45,12 @@ class NodeImpl(ABC):
     
     def set_id(self, uuid: UUID):
         self.id = uuid
-        
+    
+    def set_label(self, label_dict: dict[str, Any]):
+        self.output["label"] = label_dict    
+    
     def info(self):
         return {"name": self.name, "id": str(self.id), "kwargs": self.parameters, "type": self.__class__.__name__}
-
-    def set_label(self, label_dict: dict[str, Any]):
-        self.output["label"] = label_dict
         
     def get_visualize_data(self) -> dict[str, Any]:
         return {}
@@ -58,7 +58,7 @@ class NodeImpl(ABC):
 
 class ModelInput(ABC):
     def __init__(self) -> None:
-        self.model = None
+        self.model: NodeImpl = None
         
     def add_model_node(self, model: NodeImpl):
         self.model = model
@@ -66,7 +66,7 @@ class ModelInput(ABC):
 
 class DataInput(ABC):
     def __init__(self) -> None:
-        self.data = None
+        self.data: NodeImpl = None
         
     def add_data_node(self, data: NodeImpl):
         self.data = data
