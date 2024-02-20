@@ -50,11 +50,16 @@ class ShapeletTransformNode(NodeImpl, DataInput):
         for idx, s in enumerate(shapelets):
             if isinstance(s, np.ndarray):
                 shapelets[idx] = s.tolist()
+        indices = self.st.indices_
+        df = self.data.get_output("data")
+        drop_cols = self.get_output("label")["target"]
         return {
             "shapelet_transformation": {
                 "shapelets": shapelets,
-                "labels": list(self.data.get_output("data").loc[self.st.indices_[:, 0], self.data.get_output("label")["target"]]),
+                "labels": list(df.loc[self.st.indices_[:, 0], self.data.get_output("label")["target"]]),
                 "scores": self.st.scores_.tolist(),
-                "criterion": self.st.criterion
+                "criterion": self.st.criterion,
+                "indices": indices.tolist(),
+                "timeseries": df.drop(columns=drop_cols).loc[indices[:, 0]].values.tolist(),
             }
         }
