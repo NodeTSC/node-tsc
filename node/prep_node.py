@@ -1,5 +1,8 @@
+from typing import Any
 from uuid import UUID
 from node import NodeImpl, DataInput
+import pandas as pd
+from utils import get_dataframe_column_types
 
 
 class PrepNode(NodeImpl, DataInput):
@@ -37,3 +40,13 @@ class PrepNode(NodeImpl, DataInput):
     
     def change_type(self, column: str, as_type: any):
         self.output["data"][column] = self.output["data"][column].astype(as_type)
+
+    def get_visualize_data(self) -> dict[str, Any]:
+        df: pd.DataFrame = self.get_output("data")
+        return {
+            "data": {
+                "data": df.values.tolist(),
+                "col_type": get_dataframe_column_types(df)
+            },
+            "meta": self.output["meta"]
+        }

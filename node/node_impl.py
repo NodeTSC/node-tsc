@@ -13,7 +13,7 @@ class NodeImpl(ABC):
         self.output: dict[str, Any] = {
             "meta": {
                 "target": None,
-                "exclude": None,
+                "exclude": [],
             }
         }
 
