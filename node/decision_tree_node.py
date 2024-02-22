@@ -17,7 +17,7 @@ class DecisionTreeNode(NodeImpl, DataInput):
             # reading data
             data = self.data.get_output("data")
             # dropping columns that is not time series data
-            target_label = self.data.get_output("label")["target"]
+            target_label = self.data.get_output("meta")["target"]
             X_train = data.drop(columns=target_label)
             y_train = data[target_label]
             # fitting model

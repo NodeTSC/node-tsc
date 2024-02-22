@@ -33,7 +33,7 @@ class PrepNode(NodeImpl, DataInput):
         return ["instructions"]
     
     def set_role(self, column: str, role: str):
-        self.output["label"][role] = column
+        self.output["meta"][role] = column
     
     def change_type(self, column: str, as_type: any):
         self.output["data"][column] = self.output["data"][column].astype(as_type)

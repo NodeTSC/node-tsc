@@ -11,7 +11,7 @@ class ApplyModelNode(NodeImpl, DataInput, ModelInput):
 
     def add_data_node(self, data: NodeImpl):
         try:
-            self.output["label"] = data.get_output("label")
+            self.output["meta"] = data.get_output("meta")
         except:
             pass
         return super().add_data_node(data)
@@ -22,8 +22,8 @@ class ApplyModelNode(NodeImpl, DataInput, ModelInput):
             data = self.data.get_output("data")
             
             # data has target label
-            if self.output["label"]["target"] is not None:
-                target = self.output["label"]["target"]
+            if self.output["meta"]["target"] is not None:
+                target = self.output["meta"]["target"]
                 
                 X = data.drop(columns=target)
                 transformed_X = None

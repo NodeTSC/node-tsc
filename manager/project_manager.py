@@ -48,7 +48,7 @@ class ProjectManager():
                     dest.add_model_node(source)
         self.edges.append(Edge(source.id, dest.id, port))
         # TODO: change this temporary label transfering
-        dest.set_label(source.get_output("label"))
+        dest.set_meta(source.get_output("meta"))
         logging.info(f'Add edge => {source}-{dest} type: {port.name}')
     
     def delete_edge(self, source: UUID, dest: UUID, port: EdgePortType):

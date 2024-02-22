@@ -11,8 +11,9 @@ class NodeImpl(ABC):
         self.parameters: dict = {k: None for k in self.get_parameters()}
         self.set_parameters(**kwargs)
         self.output: dict[str, Any] = {
-            "label": {
+            "meta": {
                 "target": None,
+                "exclude": None,
             }
         }
 
@@ -46,8 +47,8 @@ class NodeImpl(ABC):
     def set_id(self, uuid: UUID):
         self.id = uuid
     
-    def set_label(self, label_dict: dict[str, Any]):
-        self.output["label"] = label_dict    
+    def set_meta(self, meta_dict: dict[str, Any]):
+        self.output["meta"] = meta_dict    
     
     def info(self):
         return {"name": self.name, "id": str(self.id), "kwargs": self.parameters, "type": self.__class__.__name__}
