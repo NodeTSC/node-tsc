@@ -5,6 +5,7 @@ from node import NodeFactory, NodeType
 import json
 from uuid import UUID
 import logging
+from utils import NpEncoder
 
 
 # logging setting
@@ -107,5 +108,5 @@ def project_load():
 def visualize_data():
     nodeId = UUID(request.args.get("nodeId"))
     return json.dumps(
-        project.get_node_by_id(nodeId).get_visualize_data()
+        project.get_node_by_id(nodeId).get_visualize_data(), cls=NpEncoder
     )
