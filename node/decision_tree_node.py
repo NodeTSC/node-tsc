@@ -68,9 +68,9 @@ class DecisionTreeNode(NodeImpl, DataInput):
         while len(stack) > 0:
             node_id, depth = stack.pop()
             node_depth[node_id] = depth
-            
+
             is_split_node = children_left[node_id] != children_right[node_id]
-            
+
             if is_split_node:
                 stack.append((children_left[node_id], depth+1))
                 stack.append((children_right[node_id], depth+1))
