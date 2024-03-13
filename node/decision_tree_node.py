@@ -13,6 +13,9 @@ class DecisionTreeNode(NodeImpl, DataInput):
         super().__init__(name, id_, **kwargs)
         self.output["model"] = self.classifier
         self.parameters = self.classifier.get_params()
+        
+        # TODO: add confusion matrix in scores
+        self.scores = {}
     
     def execute(self) -> None:
         if self.data is not None:
@@ -20,14 +23,15 @@ class DecisionTreeNode(NodeImpl, DataInput):
             data = self.data.get_output("data")
             # dropping columns that is not time series data
             target_label = self.data.get_output("meta")["target"]
-            X_train = data.drop(columns=target_label)
+            x_train = data.drop(columns=target_label)
             y_train = data[target_label]
             # fitting model
-            self.classifier.fit(X_train, y_train)
+            self.classifier.fit(x_train, y_train)
             # transforming training data
-            self.output["data"] = self.classifier.predict(X_train)
+            self.output["data"] = self.classifier.predict(x_train)
             # debugging score
-            print(f"{self.name} train score: {self.classifier.score(X_train, y_train)}")
+            print(f"{self.name} train score: {self.classifier.score(x_train, y_train)}")
+            self.scores["accuracy"] = self.classifier.score(x_train, y_train)
     
     def priority(self) -> int:
         try:
@@ -43,7 +47,8 @@ class DecisionTreeNode(NodeImpl, DataInput):
             "tree_rules": {
                 "criterion": self.classifier.get_params()["criterion"],
                 "tree_nodes": self.get_tree_rules(),
-            }
+            },
+            "score": self.scores
         }
         # get shapelets from shapelet transform nodes if any
         if isinstance(self.data, ShapeletTransformNode):

@@ -12,6 +12,9 @@ class KnnNode(NodeImpl, DataInput):
         super().__init__(name, id_, **kwargs)
         self.output["model"] = self.classifier
         self.parameters = self.classifier.get_params()
+        
+        # TODO: add confusion matrix in scores
+        self.scores = {}
 
     def execute(self) -> None:
         if self.data is not None:
@@ -26,6 +29,7 @@ class KnnNode(NodeImpl, DataInput):
             self.output["data"] = self.classifier.predict(x_train)
             # debugging score
             print(f"{self.name} train score: {self.classifier.score(x_train, y_train)}")
+            self.scores["accuracy"] = self.classifier.score(x_train, y_train)
 
     def get_parameters(self) -> list[str]:
         return list(self.classifier.get_params().keys())
@@ -37,4 +41,6 @@ class KnnNode(NodeImpl, DataInput):
             return None
         
     def get_visualize_data(self) -> dict[str, Any]:
-        return super().get_visualize_data()
+        return {
+            "scores": self.scores
+        }
