@@ -98,7 +98,6 @@ class ClassifierNode(NodeImpl, DataInput):
         # TODO: add confusion matrix in scores
         self.scores = {}
     
-    @abstractmethod
     def __set_classifier(self, **kwargs):
         pass
     
@@ -113,7 +112,7 @@ class ClassifierNode(NodeImpl, DataInput):
             # fitting model
             self.classifier.fit(x_train, y_train)
             # transforming training data
-            self.output["data"] = self.classifier.predict(x_train, y_train)
+            self.output["data"] = self.classifier.predict(x_train)
             # logging
             logging.info(f'f"{self.name} train score: {self.classifier.score(x_train, y_train)}')
             # update scores
