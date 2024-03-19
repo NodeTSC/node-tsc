@@ -2,6 +2,9 @@ from __future__ import annotations
 from typing import Any
 from abc import ABC, abstractmethod
 from uuid import uuid4, UUID
+import pandas as pd
+from sklearn.base import *
+import logging
 
 
 class NodeImpl(ABC):
@@ -71,3 +74,58 @@ class DataInput(ABC):
         
     def add_data_node(self, data: NodeImpl):
         self.data = data
+
+
+class Classifier(ClassifierMixin, BaseEstimator, TransformerMixin):
+    
+    def fit(self, *args, **kwargs):
+        pass
+
+    def predict(self, *args, **kwargs):
+        pass
+
+
+class ClassifierNode(NodeImpl, DataInput):
+    
+    classifier: Classifier
+    
+    def __init__(self, name: str = None, id_: UUID = None, **kwargs) -> None:
+        self.__set_classifier(**kwargs)
+        super().__init__(name, id_, **kwargs)
+        self.output["model"] = self.classifier
+        self.parameters = self.classifier.get_params()
+        
+        # TODO: add confusion matrix in scores
+        self.scores = {}
+    
+    @abstractmethod
+    def __set_classifier(self, **kwargs):
+        pass
+    
+    def execute(self) -> None:
+        if self.data is not None:
+            # reading data
+            data: pd.DataFrame = self.data.get_output("data")
+            # dropping columns that is not time series elements
+            target_label = self.data.get_output("meta")["target"]
+            x_train = data.drop(columns=target_label)
+            y_train = data[target_label]
+            # fitting model
+            self.classifier.fit(x_train, y_train)
+            # transforming training data
+            self.output["data"] = self.classifier.predict(x_train, y_train)
+            # logging
+            logging.info(f'f"{self.name} train score: {self.classifier.score(x_train, y_train)}')
+            # update scores
+            self.scores["accuracy"] = self.classifier.score(x_train, y_train)
+            # TODO: add more score, such as, f1 and confusion matrix
+            
+    def priority(self) -> int:
+        try:
+            return self.data.priority() + 1
+        except:
+            return None
+        
+    def get_parameters(self) -> list[str]:
+        return list(self.classifier.get_params().keys())
+ 
