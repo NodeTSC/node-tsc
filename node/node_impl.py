@@ -76,7 +76,7 @@ class DataInput(ABC):
         self.data = data
 
 
-class Classifier(ClassifierMixin, BaseEstimator, TransformerMixin):
+class ClassifierImpl(ClassifierMixin, BaseEstimator, TransformerMixin):
     
     def fit(self, *args, **kwargs):
         pass
@@ -87,7 +87,7 @@ class Classifier(ClassifierMixin, BaseEstimator, TransformerMixin):
 
 class ClassifierNode(NodeImpl, DataInput):
     
-    classifier: Classifier
+    classifier: ClassifierImpl
     
     def __init__(self, name: str = None, id_: UUID = None, **kwargs) -> None:
         self.__set_classifier(**kwargs)

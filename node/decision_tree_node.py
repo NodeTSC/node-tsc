@@ -1,7 +1,6 @@
 from typing import Any
 from uuid import UUID
 from node import ClassifierNode
-from node.node_impl import NodeImpl
 from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 from .shapelet_transform_node import ShapeletTransformNode
@@ -14,9 +13,6 @@ class DecisionTreeNode(ClassifierNode):
         
     def __set_classifier(self, **kwargs):
         self.classifier = DecisionTreeClassifier(**kwargs)
-        
-    def execute(self) -> None:
-        return super().execute()
 
     def get_visualize_data(self) -> dict[str, Any]:
         visualize_data = {
