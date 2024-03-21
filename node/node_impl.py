@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from uuid import uuid4, UUID
 import pandas as pd
 from sklearn.base import *
+from sklearn.metrics import confusion_matrix, classification_report
 import logging
 
 
@@ -116,14 +117,28 @@ class ClassifierNode(NodeImpl, DataInput):
             # logging
             logging.info(f'f"{self.name} train score: {self.classifier.score(x_train, y_train)}')
             # update scores
-            self.scores["accuracy"] = self.classifier.score(x_train, y_train)
-            # TODO: add more score, such as, f1 and confusion matrix
+            self.scores = self.get_report()
             
     def priority(self) -> int:
         try:
             return self.data.priority() + 1
         except:
             return None
+    
+    def get_report(self, scores=True, confusion=True):
+        report = {}
+        data: pd.DataFrame = self.data.get_output("data")
+        target_label = self.data.get_output("meta")["target"]
+        x = data.drop(columns=target_label)
+        y = data[target_label]
+        y_pred = self.classifier.predict(x)
+        
+        if scores:
+            report["report"] = classification_report(y, y_pred, output_dict=True)
+        if confusion:
+            report["confusion_matrix"] = confusion_matrix(y, y_pred).tolist()
+        
+        return report
         
     def get_parameters(self) -> list[str]:
         return list(self.classifier.get_params().keys())
