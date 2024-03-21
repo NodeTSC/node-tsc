@@ -47,17 +47,17 @@ class PrepNode(NodeImpl, DataInput):
             target = self.get_output("meta")["target"]
             dist = df.groupby(df[target])[target].count().to_dict()
             labels = df[target].to_list()
-            df = df.drop(columns=target)
         except:
             target = None
         viz = {
             "data": {
                 "data": df.values.tolist(),
-                "col_type": get_dataframe_column_types(df)
+                "col_type": get_dataframe_column_types(df),
             },
             "meta": self.output["meta"]
         }
         if target is not None:
             viz["label_distribution"] = dist
             viz["data"]["labels"] = labels
+            viz["data"]["data"] = df.drop(columns=target).values.tolist()
         return viz

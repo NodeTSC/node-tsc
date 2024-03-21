@@ -61,6 +61,7 @@ class ShapeletTransformNode(NodeImpl, DataInput):
                 "criterion": self.st.criterion,
                 "indices": indices.tolist(),
                 "timeseries": df.drop(columns=drop_cols).loc[indices[:, 0]].values.tolist(),
+                "timeseries_labels": df[self.data.get_output("meta")["target"]].values.tolist(),
                 "transformed_data": self.st.transform(df.drop(columns=drop_cols)).tolist(),
             }
         }

@@ -136,7 +136,10 @@ class ClassifierNode(NodeImpl, DataInput):
         if scores:
             report["report"] = classification_report(y, y_pred, output_dict=True)
         if confusion:
-            report["confusion_matrix"] = confusion_matrix(y, y_pred).tolist()
+            report["confusion_matrix"] = {
+                "heatmap": confusion_matrix(y, y_pred).tolist(),
+                "labels": sorted(y.unique().tolist())
+            }
         
         return report
         
