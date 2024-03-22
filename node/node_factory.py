@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from node import InputNode, PrepNode, ShapeletTransformNode, ApplyModelNode, DecisionTreeNode, KnnNode, NodeImpl
+from node import InputNode, PrepNode, ShapeletTransformNode, ApplyModelNode, ApplyTransformerNode, DecisionTreeNode, KnnNode, NodeImpl
 from uuid import UUID
 
 
@@ -9,7 +9,8 @@ class NodeType(Enum):
     INPUT = "input"
     PREP = "prep"
     SHAPELET_TRANSFORM = "shapelet_transform"
-    APPLY = "apply"
+    APPLY_MODEL = "apply_model"
+    APPLY_TRANSFORMER = "apply_transformer"
     DECISION_TREE = "decision_tree"
     KNN = "knn"
 
@@ -25,8 +26,10 @@ class NodeFactory():
                 node = PrepNode
             case NodeType.SHAPELET_TRANSFORM:
                 node = ShapeletTransformNode
-            case NodeType.APPLY:
+            case NodeType.APPLY_MODEL:
                 node = ApplyModelNode
+            case NodeType.APPLY_TRANSFORMER:
+                node = ApplyTransformerNode
             case NodeType.DECISION_TREE:
                 node = DecisionTreeNode
             case NodeType.KNN:
