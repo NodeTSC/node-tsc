@@ -1,12 +1,12 @@
 from typing import Any
 from uuid import UUID
-from node import ClassifierNode
+from node import ClassifierNodeImpl
 from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 from .shapelet_transform_node import ShapeletTransformNode
 
 
-class DecisionTreeNode(ClassifierNode):
+class DecisionTreeNode(ClassifierNodeImpl):
     def __init__(self, name: str = "DecisionTreeClassifier", id_: UUID = None, **kwargs) -> None:
         self.__set_classifier(**kwargs)
         super().__init__(name, id_, **kwargs)

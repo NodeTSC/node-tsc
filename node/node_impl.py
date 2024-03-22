@@ -86,7 +86,7 @@ class ClassifierImpl(ClassifierMixin, BaseEstimator, TransformerMixin):
         pass
 
 
-class ClassifierNode(NodeImpl, DataInput):
+class ClassifierNodeImpl(NodeImpl, DataInput):
     
     classifier: ClassifierImpl
     
@@ -94,9 +94,7 @@ class ClassifierNode(NodeImpl, DataInput):
         self.__set_classifier(**kwargs)
         super().__init__(name, id_, **kwargs)
         self.output["model"] = self.classifier
-        self.parameters = self.classifier.get_params()
-        
-        # TODO: add confusion matrix in scores
+        self.parameters = self.classifier.get_params()        
         self.scores = {}
     
     def __set_classifier(self, **kwargs):
@@ -146,3 +144,47 @@ class ClassifierNode(NodeImpl, DataInput):
     def get_parameters(self) -> list[str]:
         return list(self.classifier.get_params().keys())
  
+ 
+class ApplyNodeImpl(NodeImpl, DataInput, ModelInput):
+     
+    def __init__(self, name: str = None, id_: UUID = None, **kwargs) -> None:
+         super().__init__(name, id_, **kwargs)
+         
+    def add_data_node(self, data: NodeImpl):
+        # get meta data from input data node
+        try:
+            self.output["meta"] = data.get_output("meta")
+        except:
+            pass
+        return super().add_data_node(data)
+    
+    def execute(self) -> None:
+        if self.data is not None and self.model is not None:
+            model = self.model.get_output("model")
+            data: pd.DataFrame = self.data.get_output("data")
+            
+            if self.output["meta"]["target"] is not None:
+                target = self.output["meta"]["target"]
+                
+                x = data.drop(columns=target)
+                transformed_x = self._transform(x)
+                
+                self.output["data"] = pd.concat([
+                    pd.DataFrame(transformed_x),
+                    data[target]
+                ], axis=1)
+            else:
+                raise ValueError("Target label is not specified in input data node.")
+    
+    @abstractmethod
+    def _transform(self, x) -> Any:
+        pass
+    
+    def priority(self) -> int:
+        try:
+            return self.data.priority() + self.model.priority() + 1
+        except:
+            return None
+    
+    def get_parameters(self) -> list[str]:
+        return []
