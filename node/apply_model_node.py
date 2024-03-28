@@ -15,6 +15,7 @@ class ApplyModelNode(ApplyNodeImpl):
         
         data = self.model.get_visualize_data()
         # predicted data
+        data["timeseries"] = x.values.tolist()
         data["score"] = self.get_report()
         data["predicted_labels"] = model.predict(x)
         data["actual_labels"] = self.data.get_output("data")[target_label].values.tolist()
@@ -29,8 +30,7 @@ class ApplyModelNode(ApplyNodeImpl):
         target_label = self.data.get_output("meta")["target"]
         x = data.drop(columns=target_label)
         y = data[target_label]
-        y_pred = model.predict(x)
-        
+        y_pred = model.predict(x)        
         if scores:
             report["report"] = classification_report(y, y_pred, output_dict=True)
         if confusion:
@@ -38,5 +38,4 @@ class ApplyModelNode(ApplyNodeImpl):
                 "heatmap": confusion_matrix(y, y_pred).tolist(),
                 "labels": sorted(y.unique().tolist())
             }
-        
         return report

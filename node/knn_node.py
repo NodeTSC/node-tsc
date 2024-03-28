@@ -19,12 +19,16 @@ class KnnNode(ClassifierNodeImpl):
         data: pd.DataFrame = self.data.get_output("data")
         target_label = self.data.get_output("meta")["target"]
         
-        predicted_label = self.classifier.predict(data.drop(columns=target_label))
         return {
+            # fit data
             "knn": {
                 "timeseries": data.drop(columns=target_label).values.tolist(),
                 "labels": list(data[target_label]),
-                "predicts": predicted_label,
+                "predicts": self.output["data"],
             },
-            "scores": self.scores
+            # predict data
+            "timeseries": data.drop(columns=target_label).values.tolist(),
+            "score": self.scores,
+            "predicted_labels": list(data[target_label]),
+            "actual_labels": self.output["data"],
         }
