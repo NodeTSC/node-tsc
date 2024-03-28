@@ -15,17 +15,22 @@ class DecisionTreeNode(ClassifierNodeImpl):
         self.classifier = DecisionTreeClassifier(**kwargs)
 
     def get_visualize_data(self) -> dict[str, Any]:
-        visualize_data = {
+        target_label = self.data.get_output("meta")["target"]
+        # fit data
+        data = {
             "tree_rules": {
                 "criterion": self.classifier.get_params()["criterion"],
                 "tree_nodes": self.get_tree_rules(),
             },
-            "score": self.scores
         }
+        # predicted data
+        data["score"] = self.scores
+        data["predicted_labels"] = self.output["data"]
+        data["actual_labels"] = self.data.get_output("data")[target_label].values.tolist()
         # get shapelets from shapelet transform nodes if any
         if isinstance(self.data, ShapeletTransformNode):
-            visualize_data["shapelet_transformation"] = self.data.get_visualize_data()["shapelet_transformation"]
-        return visualize_data
+            data["shapelet_transformation"] = self.data.get_visualize_data()["shapelet_transformation"]
+        return data
 
     def get_tree_rules(self) -> list[dict]:
         tree = self.classifier.tree_

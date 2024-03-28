@@ -13,5 +13,5 @@ class ApplyTransformerNode(ApplyNodeImpl):
         data["transformed_data"]["timeseries_labels"] = self.output["data"][target].values.tolist()
         data["transformed_data"]["transformed_data"] = self.output["data"].drop(columns=target).values.tolist()
         # transformer info
-        data["transformer"] = self.model.info()
+        data["model"] = self.model.info()
         return data
