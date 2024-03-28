@@ -160,7 +160,6 @@ class ApplyNodeImpl(NodeImpl, DataInput, ModelInput):
     
     def execute(self) -> None:
         if self.data is not None and self.model is not None:
-            model = self.model.get_output("model")
             data: pd.DataFrame = self.data.get_output("data")
             
             if self.output["meta"]["target"] is not None:

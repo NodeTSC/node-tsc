@@ -54,6 +54,7 @@ class ShapeletTransformNode(NodeImpl, DataInput):
         df = self.data.get_output("data")
         drop_cols = self.get_output("meta")["target"]
         return {
+            # fit data
             "shapelet_transformation": {
                 "shapelets": shapelets,
                 "labels": list(df.loc[self.st.indices_[:, 0], self.data.get_output("meta")["target"]]),
@@ -61,6 +62,9 @@ class ShapeletTransformNode(NodeImpl, DataInput):
                 "criterion": self.st.criterion,
                 "indices": indices.tolist(),
                 "timeseries": df.drop(columns=drop_cols).loc[indices[:, 0]].values.tolist(),
+            },
+            # transformed data
+            "transformed_data": {
                 "timeseries_labels": df[self.data.get_output("meta")["target"]].values.tolist(),
                 "transformed_data": self.st.transform(df.drop(columns=drop_cols)).tolist(),
             }
