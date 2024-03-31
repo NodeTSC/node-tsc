@@ -102,6 +102,7 @@ class ClassifierNodeImpl(NodeImpl, DataInput):
         pass
     
     def execute(self) -> None:
+        self.output["meta"] = self.data.get_output("meta")
         if self.data is not None:
             # reading data
             data: pd.DataFrame = self.data.get_output("data")
@@ -150,16 +151,9 @@ class ApplyNodeImpl(NodeImpl, DataInput, ModelInput):
      
     def __init__(self, name: str = None, id_: UUID = None, **kwargs) -> None:
          super().__init__(name, id_, **kwargs)
-         
-    def add_data_node(self, data: NodeImpl):
-        # get meta data from input data node
-        try:
-            self.output["meta"] = data.get_output("meta")
-        except:
-            pass
-        return super().add_data_node(data)
     
     def execute(self) -> None:
+        self.output["meta"] = self.data.get_output("meta")
         if self.data is not None and self.model is not None:
             data: pd.DataFrame = self.data.get_output("data")
             

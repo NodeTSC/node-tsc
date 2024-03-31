@@ -14,6 +14,7 @@ class ShapeletTransformNode(NodeImpl, DataInput):
         self.parameters = self.st.get_params()
 
     def execute(self):
+        self.output["meta"] = self.data.get_output("meta")
         if self.data is not None:
             # reading data
             data = self.data.get_output("data")
