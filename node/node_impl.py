@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.base import *
 from sklearn.metrics import confusion_matrix, classification_report
 import logging
+from copy import deepcopy
 
 
 class NodeImpl(ABC):
@@ -22,7 +23,7 @@ class NodeImpl(ABC):
         }
 
     def get_output(self, key):
-        return self.output[key]
+        return deepcopy(self.output[key])
     
     @abstractmethod
     def execute(self) -> None:
@@ -55,7 +56,7 @@ class NodeImpl(ABC):
         self.output["meta"] = meta_dict    
     
     def info(self):
-        return {"name": self.name, "id": str(self.id), "kwargs": self.parameters, "type": self.__class__.__name__}
+        return {"name": self.name, "id": str(self.id), "kwargs": self.parameters, "type": self.__class__.__name__, "meta": self.output["meta"]}
         
     def get_visualize_data(self) -> dict[str, Any]:
         return {}

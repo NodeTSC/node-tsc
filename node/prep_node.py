@@ -13,6 +13,7 @@ class PrepNode(NodeImpl, DataInput):
         self.output["data"] = None
         
     def execute(self):
+        self.output["meta"] = self.data.get_output("meta")
         self.output["data"] = self.data.get_output("data")
         for i in self.parameters["instructions"]:
             command, column, to = i
