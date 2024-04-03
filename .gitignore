@@ -1,3 +1,7 @@
+# Workspace config
+.pylintrc
+.vscode/
+
 # temp files
 temp*
 

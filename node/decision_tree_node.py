@@ -1,8 +1,8 @@
 from typing import Any
 from uuid import UUID
-from node import ClassifierNodeImpl
 from sklearn.tree import DecisionTreeClassifier
 import numpy as np
+from node import ClassifierNodeImpl
 from .shapelet_transform_node import ShapeletTransformNode
 
 
@@ -10,7 +10,7 @@ class DecisionTreeNode(ClassifierNodeImpl):
     def __init__(self, name: str = "DecisionTreeClassifier", id_: UUID = None, **kwargs) -> None:
         self.__set_classifier(**kwargs)
         super().__init__(name, id_, **kwargs)
-        
+
     def __set_classifier(self, **kwargs):
         self.classifier = DecisionTreeClassifier(**kwargs)
 
@@ -58,7 +58,7 @@ class DecisionTreeNode(ClassifierNodeImpl):
                 stack.append((children_right[node_id], depth+1))
             else:
                 is_leaves[node_id] = True
-        # json parsable format   
+        # json parsable format
         data = []
         for i in range(n_nodes):
             temp = {

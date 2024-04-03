@@ -22,7 +22,7 @@ def visualize_node_graph(nodes: list[NodeImpl]) -> None:
                 name=f"{node.name}\n(invalid input)"
             )
             color_map.append("red")
-    
+
     for node in nodes:
         if hasattr(node, 'data') and node.data is not None:
             g.add_edge(node.data.id, node.id, label="data")

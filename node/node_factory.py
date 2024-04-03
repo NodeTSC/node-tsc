@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from enum import Enum
-from node import InputNode, PrepNode, ShapeletTransformNode, ApplyModelNode, ApplyTransformerNode, DecisionTreeNode, KnnNode, NodeImpl
 from uuid import UUID
+from node import InputNode, PrepNode, ShapeletTransformNode, ApplyModelNode, ApplyTransformerNode, DecisionTreeNode, KnnNode, NodeImpl
 
 
 class NodeType(Enum):

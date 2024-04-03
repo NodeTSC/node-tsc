@@ -1,23 +1,23 @@
 from __future__ import annotations
 
 from enum import Enum
-from node import NodeImpl, ModelInput, DataInput
 from uuid import UUID
 import json
 import pickle
 import logging
-from tqdm import tqdm
 from copy import deepcopy
+from tqdm import tqdm
+from node import NodeImpl, ModelInput, DataInput
 
 
 class ProjectManager():
     def __init__(self) -> None:
         self.nodes: list[NodeImpl] = []
         self.edges: list[Edge] = []
-        
+
     def add_node(self, node: NodeImpl) -> None:
         self.nodes.append(node)
-    
+
     def delete_node(self, node: NodeImpl) -> None:
         for other_node in self.nodes:
             # skip self
@@ -31,12 +31,12 @@ class ProjectManager():
                 if other_node.model.id == node.id:
                     self.delete_edge(node.id, other_node.id, EdgePortType.MODEL)
         self.nodes.remove(node)
-    
+
     def update_node(self, node: NodeImpl, name: str = None, **kwargs):
         if name is not None:
             node.name = name
         node.set_parameters(**kwargs)
-    
+
     def add_edge(self, source: UUID, dest: UUID, port: EdgePortType):
         source: NodeImpl = self.get_node_by_id(source)
         dest: NodeImpl = self.get_node_by_id(dest)
@@ -48,10 +48,10 @@ class ProjectManager():
                 if isinstance(dest, ModelInput):
                     dest.add_model_node(source)
         self.edges.append(Edge(source.id, dest.id, port))
-        # TODO: change this temporary label transfering
+        # label transfering
         dest.set_meta(deepcopy(source.get_output("meta")))
         logging.info(f'Add edge => {source}-{dest} type: {port.name}')
-    
+
     def delete_edge(self, source: UUID, dest: UUID, port: EdgePortType):
         del_index = None
         for index, edge in enumerate(self.edges):
@@ -70,7 +70,7 @@ class ProjectManager():
                 if isinstance(dest, ModelInput) and dest.model == source:
                     dest.model = None
         logging.info(f'Delete edge => {source}-{dest} type: {port.name}')
-                                        
+
     def get_node_by_id(self, uuid: UUID) -> NodeImpl:
         for node in self.nodes:
             if node.id == uuid:
@@ -83,24 +83,14 @@ class ProjectManager():
                 {"nodes": self.nodes, "edges": self.edges},
                 file=f
             )
-    
+
     def load(self, fname: str):
         with open(fname, "rb") as f:
             obj = pickle.load(f)
             self.reset()
             self.nodes = obj["nodes"]
             self.edges = obj["edges"]
-            for node in self.nodes:
-                try:
-                    node_info = json.dumps(node.info())
-                except:
-                    print(node.info())
-            for edge in self.edges:
-                try:
-                    edge_info = json.dumps(edge.info())
-                except:
-                    print(edge.info())
-    
+
     def reset(self):
         self.nodes = []
         self.edges = []
@@ -116,7 +106,7 @@ class ProjectManager():
         for e in tqdm(executable_node, desc="execute nodes"):
             print(f"priority {e.priority()} executing {e.name}... ({e.__class__})")
             e.execute()
-            
+
     def json(self):
         return json.dumps({
             "nodes": [node.info() for node in self.nodes],
@@ -129,17 +119,17 @@ class Edge():
         self.source = source
         self.dest = dest
         self.port = port
-        
+
     def __eq__(self, other: Edge) -> bool:
         return self.source == other.source and self.dest == other.dest and self.port == other.port
-    
+
     def info(self):
         return {
             "source": str(self.source),
             "dest": str(self.dest),
             "port": self.port.name
         }
-        
+
 
 class EdgePortType(Enum):
     MODEL = "model"

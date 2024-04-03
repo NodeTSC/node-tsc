@@ -1,18 +1,18 @@
 from typing import Any
-from node import ApplyNodeImpl
 import pandas as pd
 from sklearn.metrics import confusion_matrix, classification_report
+from node import ApplyNodeImpl
 
 
 class ApplyModelNode(ApplyNodeImpl):
     def _transform(self, x) -> Any:
         return self.model.get_output("model").predict(x)
-    
+
     def get_visualize_data(self) -> dict[str, Any]:
         model = self.model.get_output("model")
         target_label = self.data.get_output("meta")["target"]
         x = self.data.get_output("data").drop(columns=target_label)
-        
+
         data = self.model.get_visualize_data()
         # predicted data
         data["timeseries"] = x.values.tolist()
@@ -30,7 +30,7 @@ class ApplyModelNode(ApplyNodeImpl):
         target_label = self.data.get_output("meta")["target"]
         x = data.drop(columns=target_label)
         y = data[target_label]
-        y_pred = model.predict(x)        
+        y_pred = model.predict(x)
         if scores:
             report["report"] = classification_report(y, y_pred, output_dict=True)
         if confusion:

@@ -1,8 +1,8 @@
 from typing import Any
 from uuid import UUID
-from node import NodeImpl, DataInput
 import pandas as pd
 from utils import get_dataframe_column_types
+from node import NodeImpl, DataInput
 
 
 class PrepNode(NodeImpl, DataInput):
@@ -11,7 +11,7 @@ class PrepNode(NodeImpl, DataInput):
         if self.parameters["instructions"] is None:
             self.parameters["instructions"] = []
         self.output["data"] = None
-        
+
     def execute(self):
         self.output["meta"] = self.data.get_output("meta")
         self.output["data"] = self.data.get_output("data")
@@ -26,19 +26,19 @@ class PrepNode(NodeImpl, DataInput):
                             self.change_type(column, int)
                         case "float":
                             self.change_type(column, float)
-                    
+
     def priority(self) -> int:
         try:
             return self.data.priority() + 1
         except:
             return None
-    
+
     def get_parameters(self) -> list[str]:
         return ["instructions"]
-    
+
     def set_role(self, column: str, role: str):
         self.output["meta"][role] = column
-    
+
     def change_type(self, column: str, as_type: any):
         self.output["data"][column] = self.output["data"][column].astype(as_type)
 
